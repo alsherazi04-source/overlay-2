@@ -295,9 +295,10 @@ function connectTikfinity() {
     try { data = JSON.parse(event.data); } catch { return; }
     const type = data.type || data.event;
     if (type !== 'like') return; // only react to LIKE events, not chat
-    const username = data.uniqueId || data.nickname || data?.user?.uniqueId || data?.user?.nickname || 'مشاهد';
-    const count = data.likeCount || data.count || 1;
-    addLikes(username, count);
+  const payload = data.data  data;
+const username = payload.uniqueId  payload.nickname  payload?.user?.uniqueId  payload?.user?.nickname  'مشاهد';
+const count = payload.likeCount  payload.count || 1;
+addLikes(username, count);
   });
   setTimeout(() => {
     if (Object.keys(scores).length === 0) {
