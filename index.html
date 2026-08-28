@@ -293,12 +293,32 @@ function connectTikfinity() {
   socket.addEventListener('message', (event) => {
     let data;
     try { data = JSON.parse(event.data); } catch { return; }
-    const type = data.type || data.event;
-    if (type !== 'like') return; // only react to LIKE events, not chat
-  const payload = data.data  data;
-const username = payload.uniqueId  payload.nickname  payload?.user?.uniqueId  payload?.user?.nickname  'مشاهد';
-const count = payload.likeCount  payload.count || 1;
-addLikes(username, count);
+ 
+console.log('RAW DATA:', JSON.stringify(data));
+    
+const type = data.type || data.event;
+      if (type !== 'like') return;
+
+      let payload = data;
+      if (data.data) { payload = data.data; }
+
+      let uUniq = null;
+      let uNick = null;
+      if (payload.user) {
+        uUniq = payload.user.uniqueId;
+        uNick = payload.user.nickname;
+      }
+
+      function pick(fallback) {
+        for (let i = 1; i < arguments.length; i++) {
+          if (arguments[i]) return arguments[i];
+        }
+        return fallback;
+      }
+
+      const username = pick('مشاهد', payload.uniqueId, payload.nickname, uUniq, uNick);
+      const count = pick(1, payload.likeCount, payload.count);
+      addLikes(username, count);
   });
   setTimeout(() => {
     if (Object.keys(scores).length === 0) {
