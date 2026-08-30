@@ -10,38 +10,29 @@
     --sky: #4FC3F7;
     --indigo: #3B5BFF;
     --gold: #FFCB4C;
-    --track-bg-1: #0d2440;
-    --track-bg-2: #123056;
-    --text: #f5faff;
+    --track-1: #0d2440;
+    --track-2: #123056;
   }
   html,body{
     margin:0; padding:0; background:transparent; overflow:hidden;
     width:100%; height:100%;
     font-family:'Tajawal',sans-serif;
   }
+  #wrap{ position:fixed; left:20px; right:20px; bottom:20px; }
 
-  #wrap{
-    position:fixed; left:20px; right:20px; bottom:20px;
-  }
-
-  /* ranking bar */
   #ranking{
     display:flex; justify-content:center; gap:22px;
     margin-bottom:8px;
     font-family:'Lalezar',sans-serif;
-    font-size:17px;
-    color:#fff;
+    font-size:17px; color:#fff;
   }
   #ranking .slot{
     display:flex; align-items:center; gap:6px;
     background: rgba(13,36,64,.75);
-    padding:5px 16px;
-    border-radius: 999px;
+    padding:5px 16px; border-radius:999px;
+    min-width:120px; justify-content:center;
     box-shadow: 0 4px 14px rgba(0,0,0,.35);
-    min-width:120px;
-    justify-content:center;
   }
-  #ranking .slot .medal{ font-size:18px; }
   #ranking .slot .name{
     background: linear-gradient(90deg, var(--gold), #FFA726);
     -webkit-background-clip:text; background-clip:text; color:transparent;
@@ -49,287 +40,284 @@
   }
 
   #namesMask{
-    position:relative;
-    height:30px;
-    overflow:hidden;
+    position:relative; height:30px; overflow:hidden;
     background: rgba(13,36,64,.6);
-    border-radius: 999px;
-    margin-bottom:8px;
+    border-radius:999px; margin-bottom:8px;
     box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
   }
   #namesTrack{
     position:absolute; top:0; bottom:0;
-    display:flex; align-items:center;
-    white-space:nowrap;
-    will-change: transform;
+    display:flex; align-items:center; white-space:nowrap;
     animation: names-scroll 18s linear infinite;
   }
   @keyframes names-scroll{
     from{ transform: translateX(100%); }
     to{ transform: translateX(-100%); }
   }
-  .name-chip{
+  .chip{
     display:inline-flex; align-items:center; gap:6px;
-    padding: 0 16px;
-    font-size:13px;
-    color:#fff;
-    font-weight:700;
+    padding:0 16px; font-size:13px; color:#fff; font-weight:700;
   }
-  .name-chip .cnt{
+  .chip .cnt{
+    font-family:'Lalezar',sans-serif; font-size:14px;
     background: linear-gradient(90deg, var(--gold), #FFA726);
     -webkit-background-clip:text; background-clip:text; color:transparent;
-    font-family:'Lalezar',sans-serif;
-    font-size:14px;
   }
 
-  /* race track */
   #track{
-    position:relative;
-    height:70px;
-    background: linear-gradient(90deg, var(--track-bg-1) 0%, var(--track-bg-2) 100%);
-    border-radius: 18px;
+    position:relative; height:76px;
+    background: linear-gradient(90deg, var(--track-1) 0%, var(--track-2) 100%);
+    border-radius:18px; overflow:hidden;
     box-shadow: 0 8px 24px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.07);
-    overflow:hidden;
   }
   #track::before{
-    /* dashed lane line */
-    content:'';
-    position:absolute; top:50%; left:0; right:70px;
-    height:2px;
-    background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.25) 0 10px, transparent 10px 22px);
-    transform: translateY(-50%);
+    content:''; position:absolute; top:50%; left:56px; right:0;
+    height:2px; transform: translateY(-50%);
+    background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.22) 0 10px, transparent 10px 22px);
   }
   #finish{
-    position:absolute; top:0; bottom:0; left:0;
-    width:56px;
+    position:absolute; top:0; bottom:0; left:0; width:56px;
     display:flex; align-items:center; justify-content:center;
-    font-size:26px;
+    font-size:26px; z-index:1;
     background: repeating-conic-gradient(#fff 0 25%, #111 0 50%) 0 0 / 14px 14px;
-    border-radius: 0 18px 18px 0;
   }
 
   .racer{
-    position:absolute;
-    top:50%;
-    right:66px; /* start position near finish side minus margin, moves left->toward finish as it's RTL... actually finish is on left */
+    position:absolute; top:50%;
     transform: translateY(-50%);
     display:flex; flex-direction:column; align-items:center;
-    transition: right 0.7s cubic-bezier(.3,.8,.3,1);
+    transition: left .8s cubic-bezier(.3,.8,.3,1);
     z-index:2;
   }
   .racer .avatar{
-    width:34px; height:34px;
-    border-radius:50%;
+    width:34px; height:34px; border-radius:50%;
     display:flex; align-items:center; justify-content:center;
-    font-size:16px; font-weight:800;
-    color:#0d2440;
-    box-shadow: 0 3px 10px rgba(0,0,0,.4), 0 0 0 2px rgba(255,255,255,.5);
+    font-size:16px; font-weight:800; color:#0d2440;
+    background:#FFCB4C;
+    box-shadow: 0 3px 10px rgba(0,0,0,.45), 0 0 0 2px rgba(255,255,255,.55);
   }
   .racer .label{
-    font-size:10px;
-    color:#fff;
-    background: rgba(0,0,0,.5);
-    padding:1px 6px;
-    border-radius:8px;
-    margin-top:3px;
-    max-width:64px;
-    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    font-size:10px; color:#fff;
+    background: rgba(0,0,0,.55);
+    padding:1px 6px; border-radius:8px; margin-top:3px;
+    max-width:70px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
   }
   .racer.leader .avatar{
     box-shadow: 0 0 0 3px var(--gold), 0 4px 14px rgba(255,203,76,.6);
   }
 
-  #demoToggle{
-    position:fixed; top:16px; left:16px;
-    font-family:'Tajawal',sans-serif;
-    background:#1a1a22; color:#eee; border:1px solid #333;
-    padding:6px 12px; border-radius:6px; font-size:12px;
-    cursor:pointer; opacity:.55; z-index:99;
+  #status{
+    position:fixed; top:10px; left:10px;
+    font-size:12px; color:#eee;
+    background:#1a1a22; border:1px solid #333;
+    padding:4px 10px; border-radius:6px; opacity:.5;
   }
-  #demoToggle:hover{ opacity:1; }
 </style>
 </head>
 <body>
 
 <div id="wrap">
   <div id="ranking">
-    <div class="slot"><span class="medal">🥇</span><span class="name" id="r1">--</span></div>
-    <div class="slot"><span class="medal">🥈</span><span class="name" id="r2">--</span></div>
-    <div class="slot"><span class="medal">🥉</span><span class="name" id="r3">--</span></div>
+    <div class="slot"><span>🥇</span><span class="name" id="r1">--</span></div>
+    <div class="slot"><span>🥈</span><span class="name" id="r2">--</span></div>
+    <div class="slot"><span>🥉</span><span class="name" id="r3">--</span></div>
   </div>
-  <div id="namesMask">
-    <div id="namesTrack"></div>
-  </div>
-  <div id="track">
-    <div id="finish">🏁</div>
-  </div>
+  <div id="namesMask"><div id="namesTrack"></div></div>
+  <div id="track"><div id="finish">🏁</div></div>
 </div>
 
-<button id="demoToggle" onclick="toggleDemo()">إيقاف العرض التجريبي</button>
+<div id="status">في انتظار الاتصال…</div>
 
 <script>
-const TIKFINITY_WS_URL = "ws://localhost:21213/";
+var WS_URL = "ws://localhost:21213/";
 
-const track = document.getElementById('track');
-const MAX_RACERS_SHOWN = 8;
-const palette = ['#FFCB4C','#4FC3F7','#FF6B6B','#7ED957','#B983FF','#FF9F45','#4DD8E6','#FF7AC6'];
+var track = document.getElementById('track');
+var namesTrack = document.getElementById('namesTrack');
+var statusBox = document.getElementById('status');
+var MAX_SHOWN = 8;
+var palette = ['#FFCB4C','#4FC3F7','#FF6B6B','#7ED957','#B983FF','#FF9F45','#4DD8E6','#FF7AC6'];
 
-const scores = {};      // username -> comment count
-const elements = {};    // username -> DOM node
-let colorIndex = 0;
-const colorMap = {};
+var scores = {};
+var nodes = {};
+var colors = {};
+var colorIndex = 0;
+var live = false;
 
-function colorFor(username){
-  if (!colorMap[username]) {
-    colorMap[username] = palette[colorIndex % palette.length];
-    colorIndex++;
-  }
-  return colorMap[username];
+function setStatus(txt, hide) {
+  if (hide) { statusBox.style.display = 'none'; return; }
+  statusBox.style.display = 'block';
+  statusBox.textContent = txt;
 }
 
-function ensureRacer(username){
-  if (elements[username]) return elements[username];
-  const el = document.createElement('div');
+function colorFor(name) {
+  if (!colors[name]) {
+    colors[name] = palette[colorIndex % palette.length];
+    colorIndex = colorIndex + 1;
+  }
+  return colors[name];
+}
+
+function firstLetter(name) {
+  var s = String(name).trim();
+  if (s.length === 0) { return '؟'; }
+  return s.charAt(0).toUpperCase();
+}
+
+function ensureRacer(name) {
+  if (nodes[name]) { return nodes[name]; }
+
+  var el = document.createElement('div');
   el.className = 'racer';
-  el.style.right = '66px'; // starting line, near finish side visually but track scales it
-  const avatar = document.createElement('div');
+
+  var avatar = document.createElement('div');
   avatar.className = 'avatar';
-  avatar.style.background = colorFor(username);
-  avatar.textContent = username.trim().charAt(0).toUpperCase() || '?';
-  const label = document.createElement('div');
+  avatar.style.background = colorFor(name);
+  avatar.textContent = firstLetter(name);
+
+  var label = document.createElement('div');
   label.className = 'label';
-  label.textContent = username;
+  label.textContent = name;
+
   el.appendChild(avatar);
   el.appendChild(label);
+
+  var startLeft = track.clientWidth - 40;
+  el.style.left = startLeft + 'px';
+
   track.appendChild(el);
-  elements[username] = el;
+  nodes[name] = el;
   return el;
 }
 
-function renderPositions(){
-  const names = Object.keys(scores);
-  const maxScore = Math.max(1, ...names.map(n => scores[n]));
-  const trackWidth = track.clientWidth - 90; // usable width minus finish + margins
+function render() {
+  var names = Object.keys(scores);
+  if (names.length === 0) { return; }
 
-  // sort by score desc, keep top N visible on the track
-  const sorted = names.sort((a,b) => scores[b]-scores[a]);
-  const visible = sorted.slice(0, MAX_RACERS_SHOWN);
+  var sorted = names.sort(function (a, b) { return scores[b] - scores[a]; });
+  var top = sorted.slice(0, MAX_SHOWN);
 
-  // remove racers that fell out of view
-  Object.keys(elements).forEach(name => {
-    if (!visible.includes(name)) {
-      elements[name].remove();
-      delete elements[name];
+  var maxScore = scores[sorted[0]];
+  if (!maxScore) { maxScore = 1; }
+
+  var lane = track.clientWidth - 110;
+  if (lane < 60) { lane = 60; }
+
+  Object.keys(nodes).forEach(function (name) {
+    if (top.indexOf(name) === -1) {
+      nodes[name].remove();
+      delete nodes[name];
     }
   });
 
-  visible.forEach((name, idx) => {
-    const el = ensureRacer(name);
-    const ratio = scores[name] / maxScore; // 1 = leader, near finish
-    const rightPx = 66 + (1 - ratio) * trackWidth; // leader has smallest 'right' (closest to finish/left side)
-    el.style.right = rightPx + 'px';
-    el.classList.toggle('leader', idx === 0);
+  top.forEach(function (name, idx) {
+    var el = ensureRacer(name);
+    var ratio = scores[name] / maxScore;
+    var leftPx = 62 + (1 - ratio) * lane;
+    el.style.left = leftPx + 'px';
+    if (idx === 0) { el.classList.add('leader'); }
+    else { el.classList.remove('leader'); }
   });
 
-  // update ranking text
-  document.getElementById('r1').textContent = sorted[0] || '--';
-  document.getElementById('r2').textContent = sorted[1] || '--';
-  document.getElementById('r3').textContent = sorted[2] || '--';
+  document.getElementById('r1').textContent = sorted[0] ? sorted[0] : '--';
+  document.getElementById('r2').textContent = sorted[1] ? sorted[1] : '--';
+  document.getElementById('r3').textContent = sorted[2] ? sorted[2] : '--';
 
-  // rebuild the scrolling names+counts strip with everyone, sorted by count
-  const namesTrack = document.getElementById('namesTrack');
   namesTrack.innerHTML = '';
-  sorted.forEach(name => {
-    const chip = document.createElement('span');
-    chip.className = 'name-chip';
-    chip.innerHTML = `<span>${name}</span><span class="cnt">${scores[name]}</span>`;
+  sorted.forEach(function (name) {
+    var chip = document.createElement('span');
+    chip.className = 'chip';
+
+    var n = document.createElement('span');
+    n.textContent = name;
+
+    var c = document.createElement('span');
+    c.className = 'cnt';
+    c.textContent = scores[name];
+
+    chip.appendChild(n);
+    chip.appendChild(c);
     namesTrack.appendChild(chip);
   });
 }
 
-let renderPending = false;
-function scheduleRender(){
-  if (renderPending) return;
-  renderPending = true;
-  setTimeout(() => { renderPending = false; renderPositions(); }, 600);
+var pending = false;
+function scheduleRender() {
+  if (pending) { return; }
+  pending = true;
+  setTimeout(function () { pending = false; render(); }, 500);
 }
 
-function addLikes(username, count) {
-  if (!username) return;
-  scores[username] = (scores[username] || 0) + (count || 1);
+function addLikes(name, count) {
+  if (!name) { return; }
+  if (!count) { count = 1; }
+  if (!scores[name]) { scores[name] = 0; }
+  scores[name] = scores[name] + count;
   scheduleRender();
 }
 
-// ---- demo simulator ----
-const demoNames = ['DEElujinal', 'محمد الفهد', 'نور_ك', 'user9821', 'سلطان', 'بندر88', 'مايا'];
-let demoRunning = true;
-function randomDemoMessage() {
-  if (!demoRunning) return;
-  const name = demoNames[Math.floor(Math.random() * demoNames.length)];
-  addLikes(name, Math.floor(Math.random() * 5) + 1);
+/* ---- demo (stops the moment a real connection opens) ---- */
+var demoNames = ['DEElujinal', 'محمد الفهد', 'نور_ك', 'user9821', 'سلطان', 'بندر88'];
+function demoTick() {
+  if (live) { return; }
+  var n = demoNames[Math.floor(Math.random() * demoNames.length)];
+  addLikes(n, Math.floor(Math.random() * 5) + 1);
 }
-function toggleDemo() {
-  demoRunning = !demoRunning;
-  document.getElementById('demoToggle').textContent =
-    demoRunning ? 'إيقاف العرض التجريبي' : 'تشغيل العرض التجريبي';
+setInterval(demoTick, 700);
+
+function pick(fallback, list) {
+  for (var i = 0; i < list.length; i++) {
+    if (list[i]) { return list[i]; }
+  }
+  return fallback;
 }
 
-function connectTikfinity() {
-  if (!TIKFINITY_WS_URL || TIKFINITY_WS_URL === "ضع_رابطك_هنا") {
-    setInterval(randomDemoMessage, 700);
-    return;
-  }
-  let socket;
+function connect() {
+  var socket;
   try {
-    socket = new WebSocket(TIKFINITY_WS_URL);
-  } catch (err) {
-    setInterval(randomDemoMessage, 700);
+    socket = new WebSocket(WS_URL);
+  } catch (e) {
+    setTimeout(connect, 3000);
     return;
   }
-  socket.addEventListener('open', () => {
-    demoRunning = false;
-    document.getElementById('demoToggle').style.display = 'none';
+
+  socket.addEventListener('open', function () {
+    live = true;
+    scores = {};
+    Object.keys(nodes).forEach(function (n) { nodes[n].remove(); });
+    nodes = {};
+    namesTrack.innerHTML = '';
+    setStatus('', true);
   });
-  socket.addEventListener('message', (event) => {
-    let data;
-    try { data = JSON.parse(event.data); } catch { return; }
- 
-console.log('RAW DATA:', JSON.stringify(data));
-    
-const type = data.type || data.event;
-      if (type !== 'like') return;
 
-      let payload = data;
-      if (data.data) { payload = data.data; }
+  socket.addEventListener('message', function (event) {
+    var data;
+    try { data = JSON.parse(event.data); } catch (e) { return; }
 
-      let uUniq = null;
-      let uNick = null;
-      if (payload.user) {
-        uUniq = payload.user.uniqueId;
-        uNick = payload.user.nickname;
-      }
+    var type = pick(null, [data.type, data.event]);
+    if (type !== 'like') { return; }
 
-      function pick(fallback) {
-        for (let i = 1; i < arguments.length; i++) {
-          if (arguments[i]) return arguments[i];
-        }
-        return fallback;
-      }
+    var p = data.data ? data.data : data;
+    var u = p.user ? p.user : {};
 
-      const username = pick('مشاهد', payload.uniqueId, payload.nickname, uUniq, uNick);
-      const count = pick(1, payload.likeCount, payload.count);
-      addLikes(username, count);
+    var name = pick('مشاهد', [p.uniqueId, p.nickname, u.uniqueId, u.nickname]);
+    var count = pick(1, [p.likeCount, p.count]);
+
+    addLikes(name, count);
   });
-  setTimeout(() => {
-    if (Object.keys(scores).length === 0) {
-      setInterval(randomDemoMessage, 700);
-    }
-  }, 5000);
+
+  socket.addEventListener('close', function () {
+    live = false;
+    setStatus('انقطع الاتصال… إعادة المحاولة', false);
+    setTimeout(connect, 3000);
+  });
+
+  socket.addEventListener('error', function () {
+    try { socket.close(); } catch (e) {}
+  });
 }
 
-window.addEventListener('resize', renderPositions);
-connectTikfinity();
-setInterval(randomDemoMessage, 700); // demo runs until real data flips demoRunning off
+window.addEventListener('resize', render);
+connect();
 </script>
 
 </body>
