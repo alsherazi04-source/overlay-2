@@ -94,7 +94,11 @@
     display:flex; align-items:center; justify-content:center;
     font-size:16px; font-weight:800; color:#0d2440;
     background:#FFCB4C;
+    overflow:hidden;
     box-shadow: 0 3px 10px rgba(0,0,0,.45), 0 0 0 2px rgba(255,255,255,.55);
+  }
+  .racer .avatar img{
+    width:100%; height:100%; object-fit:cover; display:block;
   }
   .racer .label{
     font-size:10px; color:#fff;
@@ -137,9 +141,10 @@ var statusBox = document.getElementById('status');
 var MAX_SHOWN = 8;
 var palette = ['#FFCB4C','#4FC3F7','#FF6B6B','#7ED957','#B983FF','#FF9F45','#4DD8E6','#FF7AC6'];
 
-var scores = {};
-var nodes = {};
-var colors = {};
+var scores = Object.create(null);
+var nodes = Object.create(null);
+var colors = Object.create(null);
+var avatars = Object.create(null);
 var colorIndex = 0;
 var live = false;
 
@@ -160,7 +165,29 @@ function colorFor(name) {
 function firstLetter(name) {
   var s = String(name).trim();
   if (s.length === 0) { return '؟'; }
-  return s.charAt(0).toUpperCase();
+  var chars = Array.from(s);
+  return chars[0].toUpperCase();
+}
+
+function paintAvatar(avatar, name) {
+  var url = avatars[name];
+  avatar.style.background = colorFor(name);
+
+  if (!url) {
+    avatar.textContent = firstLetter(name);
+    return;
+  }
+
+  var img = document.createElement('img');
+  img.alt = '';
+  img.referrerPolicy = 'no-referrer';
+  img.addEventListener('error', function () {
+    avatar.textContent = firstLetter(name);
+  });
+  img.src = url;
+
+  avatar.textContent = '';
+  avatar.appendChild(img);
 }
 
 function ensureRacer(name) {
@@ -171,8 +198,7 @@ function ensureRacer(name) {
 
   var avatar = document.createElement('div');
   avatar.className = 'avatar';
-  avatar.style.background = colorFor(name);
-  avatar.textContent = firstLetter(name);
+  paintAvatar(avatar, name);
 
   var label = document.createElement('div');
   label.className = 'label';
@@ -211,7 +237,12 @@ function render() {
 
   top.forEach(function (name, idx) {
     var el = ensureRacer(name);
+    var av = el.querySelector('.avatar');
+    if (avatars[name] && av && !av.querySelector('img')) {
+      paintAvatar(av, name);
+    }
     var ratio = scores[name] / maxScore;
+    if (!isFinite(ratio)) { ratio = 0; }
     var leftPx = 62 + (1 - ratio) * lane;
     el.style.left = leftPx + 'px';
     if (idx === 0) { el.classList.add('leader'); }
@@ -247,9 +278,10 @@ function scheduleRender() {
   setTimeout(function () { pending = false; render(); }, 500);
 }
 
-function addLikes(name, count) {
+function addLikes(name, count, photo) {
   if (!name) { return; }
   if (!count) { count = 1; }
+  if (photo && !avatars[name]) { avatars[name] = photo; }
   if (!scores[name]) { scores[name] = 0; }
   scores[name] = scores[name] + count;
   scheduleRender();
@@ -282,9 +314,10 @@ function connect() {
 
   socket.addEventListener('open', function () {
     live = true;
-    scores = {};
     Object.keys(nodes).forEach(function (n) { nodes[n].remove(); });
-    nodes = {};
+    scores = Object.create(null);
+    nodes = Object.create(null);
+    avatars = Object.create(null);
     namesTrack.innerHTML = '';
     setStatus('', true);
   });
@@ -302,7 +335,19 @@ function connect() {
     var name = pick('مشاهد', [p.uniqueId, p.nickname, u.uniqueId, u.nickname]);
     var count = pick(1, [p.likeCount, p.count]);
 
-    addLikes(name, count);
+    var picList = p.profilePictureUrls || u.profilePictureUrls || [];
+    var details = p.userDetails || u.userDetails || {};
+    var detailList = details.profilePictureUrls || [];
+    var photo = pick(null, [
+      p.profilePictureUrl,
+      u.profilePictureUrl,
+      picList[0],
+      detailList[0],
+      p.avatarThumb,
+      u.avatarThumb
+    ]);
+
+    addLikes(name, count, photo);
   });
 
   socket.addEventListener('close', function () {
